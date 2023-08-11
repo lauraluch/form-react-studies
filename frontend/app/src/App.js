@@ -1,11 +1,12 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Link, Routes } from 'react-router-dom';
 import './App.css';
+import Cadastro from './components/Cadastro/Cadastro';
+import Listar from './components/Listar/Listar';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Alo</h1>
-    </div>
+    <Cadastro/>
   );
 }
 
