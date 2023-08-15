@@ -47,6 +47,21 @@ app.get('/get-users', (req, res) => {
     res.json(users);
   });
 
+app.get('/get-user-by-email', (req, res) => {
+  const userEmail = req.query.email; // Pega o email da query da URL
+
+  if (!userEmail) {
+    return res.status(400).json({ error: 'O email do usuário é necessário na consulta.' });
+  }
+
+  const user = users.find(user => user.email === userEmail);
+
+  if (!user) {
+    return res.status(404).json({ error: 'Usuário não encontrado.' });
+  }
+
+  res.json(user);
+});
 
 app.listen(3001, () => {
   console.log('Servidor rodando na porta 3001');

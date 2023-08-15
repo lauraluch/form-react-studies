@@ -40,9 +40,13 @@ function Cadastro() {
         // console.log("aaaaa", userListData)
     };
     
-    const handleEdicao = async (e) => {
+    const handleEdicao = async (e, userEmail) => {
         e.preventDefault();
 
+        const user = await fetch(`http://localhost:3001/get-user-by-email?email=${userEmail}`)
+        const userData = await user.json();
+
+        console.log("USUARIO: ", userData)
     };
 return (
     <div>
@@ -71,7 +75,7 @@ return (
                 <h3>Lista de usuários</h3>
                 <ul className="user-list">
                     {userList.map((user, index) => (
-                        <button className='btn' onClick={(e) => console.log('CLICARAM EM MIM!')}>
+                        <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
                             <li key={index}>{user.email}</li>
                         </button>
                     ))}
