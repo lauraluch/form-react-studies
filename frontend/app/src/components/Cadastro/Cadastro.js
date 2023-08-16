@@ -1,5 +1,6 @@
 import { useState } from "react"
 import './styles.css';
+import Modal from 'react-modal';
 import PopUpEdicao from "../PopUpEdicao/PopUpEdicao.js";
       
 function Cadastro() {
@@ -9,6 +10,16 @@ function Cadastro() {
     const [password, setPassword] = useState('');
     const [userList, setUserList] = useState([]);
     
+    Modal.setAppElement('#root');
+
+    const [user, setUser] = useState({
+        name: '',
+        email: '',
+        password: '',
+      });
+      
+      const [modalIsOpen, setModalIsOpen] = useState(false);
+
     const getList = async () => {
         const userListResponse = await fetch('http://localhost:3001/get-users');
         const userListData = await userListResponse.json();
@@ -48,14 +59,39 @@ function Cadastro() {
         // console.log("aaaaa", userListData)
     };
     
-    const handleEdicao = async (e, userEmail) => {
-        e.preventDefault();
+    // const handleEditar = async (e, userEmail) => {
+    //     e.preventDefault();
         
-        const user = await fetch(`http://localhost:3001/get-user-by-email?email=${userEmail}`)
-        const userData = await user.json();
+    //     const user = await fetch(`http://localhost:3001/get-user-by-email?email=${userEmail}`)
+    //     const userData = await user.json();
 
-        console.log("USUARIO: ", userData)
-    };
+    //     console.log("USUARIO: ", userData)
+    // };
+
+    const handleEditar = (e, email) => {
+        e.preventDefault();
+        // Aqui você pode implementar a lógica para buscar o usuário com o email fornecido
+        // e definir os dados no estado 'user'
+        // Exemplo fictício:
+        setUser({
+          name: 'Nome do Usuário',
+          email: email,
+          password: 'Senha do Usuário',
+        });
+        setModalIsOpen(true);
+      };
+
+      const closeModal = () => {
+        setModalIsOpen(false);
+      };
+
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevUser) => ({
+          ...prevUser,
+          [name]: value,
+        }));
+      };
 
     const handleDeletar = async (e, userEmail) => {
         e.preventDefault();
@@ -104,13 +140,23 @@ return (
             <div className='login-form'>
                 {/* <div className="list-container"> */}
                 <h3>Lista de usuários</h3>
-                <ul className="user-list">
+                <div className="list-titles">
+                    <div className="title-group">
+                        <p>E-mail</p>
+                        <p>Nome</p>
+                    </div>
+                    <p>Ações</p>
+                </div>
+                <div className="user-list">
                     {userList.map((user, index) => (
                         <div className="list-item">
                         <p>{user.email}</p>
                         <p>{user.name}</p>
                             <div className="container-btns">
-                                <PopUpEdicao user={user}/>
+                                <button className='btn' onClick={(e) => handleEditar(e, user.email)}>
+                                    <li key={index}>Editar</li>
+                                </button>
+                                {/* <PopUpEdicao user={user}/> */}
                                 {/* <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
                                     <li key={index}>Editar</li>
                                 </button> */}
@@ -120,8 +166,47 @@ return (
                             </div>
                         </div>
                     ))}
-                </ul>
+                </div>
             </div>
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel='Editar Usuário'
+            >
+                <h2>Editar Usuário</h2>
+                <form>
+                <div>
+                    <label>Nome:</label>
+                    <input
+                    type='text'
+                    name='name'
+                    value={user.name}
+                    onChange={handleInputChange}
+                    />
+                </div>
+                <div>
+                    <label>Email:</label>
+                    <input
+                    type='email'
+                    name='email'
+                    value={user.email}
+                    readOnly
+                    />
+                </div>
+                <div>
+                    <label>Senha:</label>
+                    <input
+                    type='password'
+                    name='password'
+                    value={user.password}
+                    onChange={handleInputChange}
+                    />
+                </div>
+                <button onClick={closeModal}>Fechar</button>
+                <button type='submit'>Salvar</button>
+                </form>
+            </Modal>
 
             {/* <div className='login-form'>
                 <form className='login-form-wrap'>

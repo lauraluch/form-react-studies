@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    gap: 2rem;
 }
 
 .login-form {
@@ -12,15 +13,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem;
+    padding: 0 3rem;
     background-color: rgb(255, 255, 255);
-    border: 1px solid #cecccc;
+    /* border: 1px solid #cecccc; */
 }
 
 .login-form-wrap {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
 }
 
 .subtitulo {
@@ -30,7 +32,7 @@
 .title-input {
     display: flex;
     flex-direction: column;
-    width: fit-content;
+    width: 100%;
     height: fit-content;
 }
 
@@ -54,23 +56,41 @@
     padding: 0.4rem;
     border-radius: 0.2rem;
 
+    width: 100%;
 }
 
+.list-titles {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+
+    font-weight: 500;
+}
+
+.title-group {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: space-between;
+}
 
 .user-list {
     display: flex;
     flex-direction: column;
     row-gap: 0.5rem;
     list-style: none;
-    width: 80%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 .list-item {
     display: flex;
     flex-direction: row;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
-    padding: 0 3rem;
 }
 
 .btn {
