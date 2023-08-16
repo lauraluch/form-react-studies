@@ -6,6 +6,14 @@ function Cadastro() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [userList, setUserList] = useState([]);
+    
+    const getList = async () => {
+        const userListResponse = await fetch('http://localhost:3001/get-users');
+        const userListData = await userListResponse.json();
+        setUserList(userListData);
+    }
+
+    getList();
 
     const handleCadastro = async (e) => {
         e.preventDefault();
@@ -30,24 +38,36 @@ function Cadastro() {
     
         const registerData = await registerResponse.json();
         // console.log(registerData.message);
-    
-        const userListResponse = await fetch('http://localhost:3001/get-users');
-        const userListData = await userListResponse.json();
 
         
-        setUserList(userListData);
 
         // console.log("aaaaa", userListData)
     };
     
     const handleEdicao = async (e, userEmail) => {
         e.preventDefault();
-
+        
         const user = await fetch(`http://localhost:3001/get-user-by-email?email=${userEmail}`)
         const userData = await user.json();
 
         console.log("USUARIO: ", userData)
     };
+
+    const handleDeletar = async (e, userEmail) => {
+        e.preventDefault();
+    
+        await fetch('http://localhost:3001/delete-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: userEmail }), // Usar userEmail aqui
+        });
+    
+        // Atualizar a lista de usuários após a exclusão
+        await getList();
+    }
+
 return (
     <div>
         <div className="container">
@@ -72,14 +92,24 @@ return (
             </div>
 
             <div className='login-form'>
+                {/* <div className="list-container"> */}
                 <h3>Lista de usuários</h3>
                 <ul className="user-list">
                     {userList.map((user, index) => (
-                        <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
-                            <li key={index}>{user.email}</li>
-                        </button>
+                        <div className="list-item">
+                        <p>{user.email}</p>
+                            <div className="container-btns">
+                                <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
+                                    <li key={index}>Editar</li>
+                                </button>
+                                <button className='btn' onClick={(e) => handleDeletar(e, user.email)}>
+                                    <li key={index}>Deletar</li>
+                                </button>
+                            </div>
+                        </div>
                     ))}
                 </ul>
+                {/* </div> */}
             </div>
 
             {/* <div className='login-form'>
