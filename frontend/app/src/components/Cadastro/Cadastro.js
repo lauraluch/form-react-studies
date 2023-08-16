@@ -33,7 +33,6 @@ function Cadastro() {
     
         const checkUserResponse = await fetch(`http://localhost:3001/check-email/${email}`);
         const checkUserResponseData = await checkUserResponse.json();
-        // console.log('RESPOSTA: ', checkUserResponseData);
 
         if (checkUserResponseData.exists){
             console.log(`Esse usuário já existe`)
@@ -52,31 +51,20 @@ function Cadastro() {
         getList();
     
         const registerData = await registerResponse.json();
-        // console.log(registerData.message);
-
-        
-
-        // console.log("aaaaa", userListData)
+        console.log(registerData.message);
     };
-    
-    // const handleEditar = async (e, userEmail) => {
-    //     e.preventDefault();
-        
-    //     const user = await fetch(`http://localhost:3001/get-user-by-email?email=${userEmail}`)
-    //     const userData = await user.json();
 
-    //     console.log("USUARIO: ", userData)
-    // };
 
-    const handleEditar = (e, email) => {
+    const handleEditar = async (e, email) => {
         e.preventDefault();
-        // Aqui você pode implementar a lógica para buscar o usuário com o email fornecido
-        // e definir os dados no estado 'user'
-        // Exemplo fictício:
+
+        const user = await fetch(`http://localhost:3001/get-user-by-email?email=${email}`)
+        const userData = await user.json();
+
         setUser({
-          name: 'Nome do Usuário',
+          name: userData.name,
           email: email,
-          password: 'Senha do Usuário',
+          password: userData.password,
         });
         setModalIsOpen(true);
       };
@@ -101,10 +89,9 @@ function Cadastro() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email: userEmail }), // Usar userEmail aqui
+            body: JSON.stringify({ email: userEmail }),
         });
     
-        // Atualizar a lista de usuários após a exclusão
         await getList();
     }
 
@@ -138,7 +125,6 @@ return (
             </div>
 
             <div className='login-form'>
-                {/* <div className="list-container"> */}
                 <h3>Lista de usuários</h3>
                 <div className="list-titles">
                     <div className="title-group">
@@ -156,10 +142,6 @@ return (
                                 <button className='btn' onClick={(e) => handleEditar(e, user.email)}>
                                     <li key={index}>Editar</li>
                                 </button>
-                                {/* <PopUpEdicao user={user}/> */}
-                                {/* <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
-                                    <li key={index}>Editar</li>
-                                </button> */}
                                 <button className='btn' onClick={(e) => handleDeletar(e, user.email)}>
                                     <li key={index}>Deletar</li>
                                 </button>
@@ -173,56 +155,46 @@ return (
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 contentLabel='Editar Usuário'
+                className={"modal-edit"}
             >
                 <h2>Editar Usuário</h2>
-                <form>
-                <div>
+                <form className="modal-form">
+                <div className="title-input">
                     <label>Nome:</label>
                     <input
+                    className="input"
                     type='text'
                     name='name'
                     value={user.name}
                     onChange={handleInputChange}
                     />
                 </div>
-                <div>
+                <div className="title-input">
                     <label>Email:</label>
                     <input
+                    className="input"
                     type='email'
                     name='email'
                     value={user.email}
                     readOnly
                     />
                 </div>
-                <div>
+                <div className="title-input">
                     <label>Senha:</label>
                     <input
+                    className="input"
                     type='password'
                     name='password'
                     value={user.password}
                     onChange={handleInputChange}
                     />
                 </div>
-                <button onClick={closeModal}>Fechar</button>
-                <button type='submit'>Salvar</button>
+                <div className="container-btns">
+                    <button className="btn" type='submit'>Salvar</button>
+                    <button className="btn" onClick={closeModal}>Fechar</button>
+                </div>
                 </form>
             </Modal>
-
-            {/* <div className='login-form'>
-                <form className='login-form-wrap'>
-                <h3>Editar usuários</h3>
-                <div className="title-input">
-                    <h4 className='subtitulo'>Insira seu e-mail: </h4>
-                    <input className="input" type='email' placeholder='email@email.com'/>
-                </div>
-                <div className="title-input">
-                    <h4 className='subtitulo'>Insira sua senha: </h4>
-                    <input type='password' className="input" placeholder='********'/>
-                </div>
-
-                <button type='submit' className='btn-login' onClick={(e) => handleCadastro(e)}>Cadastre-se</button>
-                </form>
-            </div> */}
         </div>
     </div>
       
