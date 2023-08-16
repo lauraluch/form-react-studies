@@ -45,7 +45,6 @@ app.post('/register', (req, res) => {
 
 app.post('/delete-user', (req, res) => {
   const { email } = req.body;
-  console.log('teste');
   const userExists = users.some(user => user.email === email);
 
   if (!userExists) {
@@ -61,9 +60,27 @@ app.post('/delete-user', (req, res) => {
   res.json({message: 'Usuário removido'})
 })
 
-// app.post('/edit-user', (req, res) =>{
-//   const 
-// })
+app.post('/edit-user', (req, res) =>{
+  const { email, name } = req.body;
+  console.log("email:", email)
+  console.log("nome:", name)
+
+  const userExists = users.some(user => user.email === email);
+
+  if (!userExists) {
+    return res.status(400).json({ error: 'Email não cadastrado' });
+  }
+
+  users.forEach(user => {
+    if (user.email === email){
+      user.name = name;
+    }
+
+    res.json({message: "Usuário editado"})
+  });
+
+
+})
 
 app.get('/get-users', (req, res) => {
     res.json(users);
