@@ -21,13 +21,6 @@ app.use(cors()); // Use o middleware cors para todas as rotas
 
 const users = [];
 
-
-app.get('/check-email/:email', (req, res) => {
-  const { email } = req.params;
-  const userExists = users.some(user => user.email === email);
-  res.json({ exists: userExists });
-});
-
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
   
