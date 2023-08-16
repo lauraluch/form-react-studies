@@ -1,5 +1,7 @@
 import { useState } from "react"
 import './styles.css';
+import Modal from 'react-modal';
+import PopUpEdicao from "../PopUpEdicao/PopUpEdicao.js";
       
 function Cadastro() {
 
@@ -8,6 +10,16 @@ function Cadastro() {
     const [password, setPassword] = useState('');
     const [userList, setUserList] = useState([]);
     
+    Modal.setAppElement('#root');
+
+    const [user, setUser] = useState({
+        name: '',
+        email: '',
+        password: '',
+      });
+      
+      const [modalIsOpen, setModalIsOpen] = useState(false);
+
     const getList = async () => {
         const userListResponse = await fetch('http://localhost:3001/get-users');
         const userListData = await userListResponse.json();
@@ -21,7 +33,6 @@ function Cadastro() {
     
         const checkUserResponse = await fetch(`http://localhost:3001/check-email/${email}`);
         const checkUserResponseData = await checkUserResponse.json();
-        // console.log('RESPOSTA: ', checkUserResponseData);
 
         if (checkUserResponseData.exists){
             console.log(`Esse usuário já existe`)
@@ -40,21 +51,35 @@ function Cadastro() {
         getList();
     
         const registerData = await registerResponse.json();
-        // console.log(registerData.message);
-
-        
-
-        // console.log("aaaaa", userListData)
+        console.log(registerData.message);
     };
-    
-    const handleEdicao = async (e, userEmail) => {
+
+
+    const handleEditar = async (e, email) => {
         e.preventDefault();
-        
-        const user = await fetch(`http://localhost:3001/get-user-by-email?email=${userEmail}`)
+
+        const user = await fetch(`http://localhost:3001/get-user-by-email?email=${email}`)
         const userData = await user.json();
 
-        console.log("USUARIO: ", userData)
-    };
+        setUser({
+          name: userData.name,
+          email: email,
+          password: userData.password,
+        });
+        setModalIsOpen(true);
+      };
+
+      const closeModal = () => {
+        setModalIsOpen(false);
+      };
+
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevUser) => ({
+          ...prevUser,
+          [name]: value,
+        }));
+      };
 
     const handleDeletar = async (e, userEmail) => {
         e.preventDefault();
@@ -64,10 +89,9 @@ function Cadastro() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email: userEmail }), // Usar userEmail aqui
+            body: JSON.stringify({ email: userEmail }),
         });
     
-        // Atualizar a lista de usuários após a exclusão
         await getList();
     }
 
@@ -101,15 +125,21 @@ return (
             </div>
 
             <div className='login-form'>
-                {/* <div className="list-container"> */}
                 <h3>Lista de usuários</h3>
-                <ul className="user-list">
+                <div className="list-titles">
+                    <div className="title-group">
+                        <p>E-mail</p>
+                        <p>Nome</p>
+                    </div>
+                    <p>Ações</p>
+                </div>
+                <div className="user-list">
                     {userList.map((user, index) => (
                         <div className="list-item">
                         <p>{user.email}</p>
                         <p>{user.name}</p>
                             <div className="container-btns">
-                                <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
+                                <button className='btn' onClick={(e) => handleEditar(e, user.email)}>
                                     <li key={index}>Editar</li>
                                 </button>
                                 <button className='btn' onClick={(e) => handleDeletar(e, user.email)}>
@@ -118,24 +148,53 @@ return (
                             </div>
                         </div>
                     ))}
-                </ul>
+                </div>
             </div>
 
-            {/* <div className='login-form'>
-                <form className='login-form-wrap'>
-                <h3>Editar usuários</h3>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel='Editar Usuário'
+                className={"modal-edit"}
+            >
+                <h2>Editar Usuário</h2>
+                <form className="modal-form">
                 <div className="title-input">
-                    <h4 className='subtitulo'>Insira seu e-mail: </h4>
-                    <input className="input" type='email' placeholder='email@email.com'/>
+                    <label>Nome:</label>
+                    <input
+                    className="input"
+                    type='text'
+                    name='name'
+                    value={user.name}
+                    onChange={handleInputChange}
+                    />
                 </div>
                 <div className="title-input">
-                    <h4 className='subtitulo'>Insira sua senha: </h4>
-                    <input type='password' className="input" placeholder='********'/>
+                    <label>Email:</label>
+                    <input
+                    className="input"
+                    type='email'
+                    name='email'
+                    value={user.email}
+                    readOnly
+                    />
                 </div>
-
-                <button type='submit' className='btn-login' onClick={(e) => handleCadastro(e)}>Cadastre-se</button>
+                <div className="title-input">
+                    <label>Senha:</label>
+                    <input
+                    className="input"
+                    type='password'
+                    name='password'
+                    value={user.password}
+                    onChange={handleInputChange}
+                    />
+                </div>
+                <div className="container-btns">
+                    <button className="btn" type='submit'>Salvar</button>
+                    <button className="btn" onClick={closeModal}>Fechar</button>
+                </div>
                 </form>
-            </div> */}
+            </Modal>
         </div>
     </div>
       

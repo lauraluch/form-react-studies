@@ -1,0 +1,88 @@
+.popUp {
+    width: 550px;
+    position: absolute;
+    top: 53vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgb(204, 204, 204);
+    box-shadow: 2px 2px 2px #c4c4c4;
+
+    background: rgb(255, 255, 255); 
+    overflow: auto; 
+    border-radius: 15px;
+    outline: none; 
+    padding: 20px;
+}
+
+.popUpOverlay {
+    position: fixed;
+    inset: 0px;
+    background-color: rgba(197, 197, 197, 0.75);
+}
+
+.popUpDescription {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 15px;
+
+    position: relative;
+    top: 25%;
+}
+
+.description-container{
+    overflow-x: auto;
+    max-height: 200px;
+    text-align: justify;
+    padding: 0 5px;
+}
+
+
+.description-container::-webkit-scrollbar {
+    width: 5px;
+}
+  
+.description-container::-webkit-scrollbar-thumb:hover {
+    background: var(--pallete-light)
+}
+  
+.description-container::-webkit-scrollbar-thumb {
+    background: linear-gradient( 180deg, var(--pallete-dark), var(--pallete-light));
+    border-radius: 5px;
+}
+  
+.description-container::-webkit-scrollbar-corner{
+    size: 0;
+}
+
+.popUpDescription > h2 {
+    margin-bottom: 10px;
+}
+
+.popUpDescription > h3 {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.badge-line{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 20px;
+}
+
+.inline{
+    width: 100%;
+    display: flex;
+    justify-content:space-between;
+}
+
+.badge-line p {
+    font-weight: var(--text-font-weight);
+}
+
+.popUpDescription > p {
+    font-weight: var(--text-font-weight);
+    margin-bottom: 20px;
+}
