@@ -1,5 +1,6 @@
 import { useState } from "react"
 import './styles.css';
+import PopUpEdicao from "../PopUpEdicao/PopUpEdicao.js";
       
 function Cadastro() {
 
@@ -109,9 +110,10 @@ return (
                         <p>{user.email}</p>
                         <p>{user.name}</p>
                             <div className="container-btns">
-                                <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
+                                <PopUpEdicao user={user}/>
+                                {/* <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
                                     <li key={index}>Editar</li>
-                                </button>
+                                </button> */}
                                 <button className='btn' onClick={(e) => handleDeletar(e, user.email)}>
                                     <li key={index}>Deletar</li>
                                 </button>
