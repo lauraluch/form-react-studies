@@ -4,6 +4,7 @@ import './styles.css';
 function Cadastro() {
 
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [userList, setUserList] = useState([]);
     
@@ -13,7 +14,7 @@ function Cadastro() {
         setUserList(userListData);
     }
 
-    getList();
+    // getList();
 
     const handleCadastro = async (e) => {
         e.preventDefault();
@@ -33,8 +34,10 @@ function Cadastro() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email, name, password }),
         });
+
+        getList();
     
         const registerData = await registerResponse.json();
         // console.log(registerData.message);
@@ -80,6 +83,12 @@ return (
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}/>
                 </div>
+                <div className="name-input">
+                    <h4>Insira seu nome:</h4>
+                    <input className="input" type='text' placeholder='nome' 
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}/>
+                </div>
                 <div className="title-input">
                     <h4 className='subtitulo'>Insira sua senha: </h4>
                     <input type='password' className="input" placeholder='********'
@@ -98,6 +107,7 @@ return (
                     {userList.map((user, index) => (
                         <div className="list-item">
                         <p>{user.email}</p>
+                        <p>{user.name}</p>
                             <div className="container-btns">
                                 <button className='btn' onClick={(e) => handleEdicao(e, user.email)}>
                                     <li key={index}>Editar</li>
@@ -109,7 +119,6 @@ return (
                         </div>
                     ))}
                 </ul>
-                {/* </div> */}
             </div>
 
             {/* <div className='login-form'>

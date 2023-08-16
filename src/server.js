@@ -29,7 +29,7 @@ app.get('/check-email/:email', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  const { email, password } = req.body;
+  const { email, name, password } = req.body;
   
   const userExists = users.some(user => user.email === email);
   if (userExists) {
@@ -37,7 +37,7 @@ app.post('/register', (req, res) => {
   }
 
   // Registre o usuário (salve em algum lugar)
-  users.push({ email, password });
+  users.push({ email, name, password });
 //   console.log(users)
   res.json({ message: 'Cadastro realizado com sucesso' });
 
@@ -60,6 +60,10 @@ app.post('/delete-user', (req, res) => {
 
   res.json({message: 'Usuário removido'})
 })
+
+// app.post('/edit-user', (req, res) =>{
+//   const 
+// })
 
 app.get('/get-users', (req, res) => {
     res.json(users);
