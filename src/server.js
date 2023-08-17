@@ -1,16 +1,3 @@
-// const express = require('express');
-// const app = express();
-
-// app.use(express.json());
-
-// app.get('/', (req, res) => {
-//     res.send('Hello World');
-// })
-
-// app.listen(3000, ()=> {
-//     console.log('listening on port 3000');
-// })
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Importe o módulo cors
@@ -74,6 +61,12 @@ app.post('/edit-user', (req, res) =>{
 
 
 })
+
+app.get('/check-email/:email', (req, res) => {
+  const { email } = req.params;
+  const userExists = users.some(user => user.email === email);
+  res.json({ exists: userExists });
+});
 
 app.get('/get-users', (req, res) => {
     res.json(users);

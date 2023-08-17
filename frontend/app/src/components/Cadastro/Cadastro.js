@@ -48,7 +48,7 @@ function Cadastro() {
           body: JSON.stringify({ email, name, password }),
         });
 
-        getList();
+        await getList();
     
         const registerData = await registerResponse.json();
         console.log(registerData.message);
@@ -80,6 +80,19 @@ function Cadastro() {
           [name]: value,
         }));
       };
+
+    const saveEdit = async (e, email, name) => {
+        e.preventDefault()
+        await fetch('http://localhost:3001/edit-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: email, name: name }),
+        });
+        await getList();
+        closeModal();
+    }
 
     const handleDeletar = async (e, userEmail) => {
         e.preventDefault();
@@ -169,7 +182,7 @@ return (
                     onChange={handleInputChange}
                     />
                 </div>
-                <div className="title-input">
+                {/* <div className="title-input">
                     <label>Email:</label>
                     <input
                     className="input"
@@ -188,9 +201,9 @@ return (
                     value={user.password}
                     onChange={handleInputChange}
                     />
-                </div>
+                </div> */}
                 <div className="container-btns">
-                    <button className="btn" type='submit'>Salvar</button>
+                    <button className="btn" type='submit' onClick={(e) => saveEdit(e, user.email, user.name)}>Salvar</button>
                     <button className="btn" onClick={closeModal}>Fechar</button>
                 </div>
                 </form>
