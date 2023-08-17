@@ -182,7 +182,7 @@ return (
                     onChange={handleInputChange}
                     />
                 </div>
-                {/* <div className="title-input">
+                <div className="title-input">
                     <label>Email:</label>
                     <input
                     className="input"
@@ -201,7 +201,7 @@ return (
                     value={user.password}
                     onChange={handleInputChange}
                     />
-                </div> */}
+                </div>
                 <div className="container-btns">
                     <button className="btn" type='submit' onClick={(e) => saveEdit(e, user.email, user.name)}>Salvar</button>
                     <button className="btn" onClick={closeModal}>Fechar</button>
